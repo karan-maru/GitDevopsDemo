@@ -9,6 +9,7 @@ import com.microsoft.appcenter.crashes.Crashes
 class MainActivity : AppCompatActivity() {
 
     //trying to resolve app center check
+    //trying one more time
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
