@@ -63,8 +63,8 @@ slack_notify() {
 
     curl -X POST --data-urlencode \
         "payload={
-            \"channel\": \"#notifications\",
-            \"username\": \"App Center\",
+            \"channel\": \"#devops_testing\",
+            \"username\": \"DevopsTesting\",
             \"text\": \"Hello\",
             \"icon_url\": \"$ICON\" \
         }" \
