@@ -40,61 +40,15 @@ else
 fi
 
 
-
-
-
-
 # Send a slack notification specifying whether or
 # not a build successfully completed.
-#
-# Contributed by: David Siegel
-# https://github.com/quicktype/quicktype/
+
+webhookUrl=https://hooks.slack.com/services/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
 
 cd $APPCENTER_SOURCE_DIRECTORY
-
-USR=karan_maru
-APP=GitDevopsDemo
-
-ICON=https://pbs.twimg.com/profile_images/881784177422725121/hXRP69QY_200x200.jpg
-
-build_url=https://appcenter.ms/users/$ORG/apps/$APP/build/branches/$APPCENTER_BRANCH/builds/$APPCENTER_BUILD_ID
-build_link="<$build_url|$APP $APPCENTER_BRANCH #$APPCENTER_BUILD_ID>"
-
-version() {
-    cat package.json | jq -r .version
-}
-
-slack_notify() {
-    local message
-    local "${@}"
-
-    curl -X POST --data-urlencode \
-        "payload={
-            \"channel\": \"#devops_testing\",
-            \"username\": \"App Center\",
-            \"text\": \"$message\",
-            \"icon_url\": \"$ICON\" \
-        }" \
-        $SLACK_WEBHOOK
-}
-
-slack_notify_build_passed() {
-    slack_notify message="✓ $build_link built"
-}
-
-slack_notify_build_failed() {
-    slack_notify message="💥 $build_link build failed"
-}
-
-slack_notify_deployed() {
-    slack_notify message="✓ <$build_url|$APP v`version`> released to npm"
-}
-
-slack_notify_homebrew_bump() {
-    slack_notify message="✓ <https://github.com/karan-maru/GitDevopsDemo/pull|$APP v`version`> bump PR sent to GitDevopsDemo"
-}
-
-if [ "$AGENT_JOBSTATUS" != "Succeeded" ]; then
-    slack_notify_build_failed
-    exit 0
-fi
+curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "payload={
+        \"user_name\": \"karan.maru@plasticmobile.com\",
+        \"username\": \"DevopsTesting\",
+        \"text\": \"APP [DevopsDemo] build success and distributed.\",
+        \"icon_emoji\": \":joy_cat:\"
+      }" \ $webhookUrl
