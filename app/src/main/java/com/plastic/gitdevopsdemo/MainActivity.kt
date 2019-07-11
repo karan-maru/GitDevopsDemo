@@ -4,9 +4,11 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,5 +27,9 @@ class MainActivity : AppCompatActivity() {
         AppCenter.setLogLevel(Log.VERBOSE)
 //        val intent = Intent(this, TempActivity::class.java)
 //        startActivity(intent)
+
+        button.setOnClickListener {
+            Toast.makeText(this@MainActivity, "Button clicked", Toast.LENGTH_SHORT).show()
+        }
     }
 }

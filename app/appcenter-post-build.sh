@@ -39,55 +39,48 @@
 #	echo "failure mail sent"
 #fi
 
+# Post Build Script
+
+set -e # Exit immediately if a command exits with a non-zero status (failure)
+
+echo "***********"
+echo "Post Build Script"
+echo "***********"
+
+
+# Run Android APPDebug & APPTest
+$APPCENTER_SOURCE_DIRECTORY/gradlew assembleDebug
+$APPCENTER_SOURCE_DIRECTORY/gradlew assembleAndroidTest
+$APPCENTER_SOURCE_DIRECTORY/gradlew assembleRelease
+
+# variables
+appCenterLoginApiToken=$APPCENTER_ACCESS_TOKEN
+locale="en_US"
+appName="karan_maru/GitDevopsDemo"
+deviceName="9c7fd2fc"
+testSeriesName="launch-tests"
+appDebugPath=$APPCENTER_SOURCE_DIRECTORY/app/build/outputs/apk/debug/app-debug.apk
+appReleasePath=$APPCENTER_SOURCE_DIRECTORY/app/build/outputs/apk/release/app-release.apk
+buildDir=$APPCENTER_SOURCE_DIRECTORY/app/build/outputs/apk/androidTest/debug
+
+# Run UITest if branch is master
+if [ "$APPCENTER_BRANCH" == "master" ];
+then
+    # app center command espresso test
+
+echo "########## $appName espresso start ##########"
+#    appcenter login
+    appcenter test run espresso --app $appName --devices $deviceName --app-path $appDebugPath --test-series $testSeriesName --locale $locale --build-dir $buildDir --token $appCenterLoginApiToken;
+    echo "########## $appName espresso finished ##########"
+else
+
+echo "Current branch is not 'master'"
+fi
+
+
 
 # Send a slack notification specifying whether or
 # not a build successfully completed.
 
-cd $APPCENTER_SOURCE_DIRECTORY
+curl -X POST -H 'Content-type: application/json' --data '{"text":"The app has been built with AppCenter!"}' https://hooks.slack.com/services/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
 
-ORG=quicktype
-APP=quicktype
-
-ICON=https://pbs.twimg.com/profile_images/881784177422725121/hXRP69QY_200x200.jpg
-
-build_url=https://appcenter.ms/orgs/$ORG/apps/$APP/build/branches/$APPCENTER_BRANCH/builds/$APPCENTER_BUILD_ID
-build_link="<$build_url|$APP $APPCENTER_BRANCH #$APPCENTER_BUILD_ID>"
-
-version() {
-    cat package.json | jq -r .version
-}
-
-slack_notify() {
-#    local message
-#    local "${@}"
-
-    curl -X POST --data-urlencode \
-        "payload={
-            \"channel\": \"#devops_testing\",
-            \"username\": \"DevopsTesting\",
-            \"text\": \"Hello\",
-            \"icon_url\": \"$ICON\" \
-        }" \
-        $SLACK_WEBHOOK
-}
-
-slack_notify_build_passed() {
-    slack_notify message="✓ $build_link built"
-}
-
-slack_notify_build_failed() {
-    slack_notify message="💥 $build_link build failed"
-}
-
-slack_notify_deployed() {
-    slack_notify message="✓ <$build_url|$APP v`version`> released to npm"
-}
-
-slack_notify_homebrew_bump() {
-    slack_notify message="✓ <https://github.com/Homebrew/homebrew-core/pulls|$APP v`version`> bump PR sent to Homebrew"
-}
-
-if [ "$AGENT_JOBSTATUS" != "Succeeded" ]; then
-    slack_notify_build_failed
-    exit 0
-fi
