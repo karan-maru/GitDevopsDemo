@@ -69,6 +69,7 @@ then
     # app center command espresso test
 
 echo "########## $appName espresso start ##########"
+    appcenter login
     appcenter test run espresso --app $appName --devices $deviceName --app-path $appDebugPath --test-series $testSeriesName --locale $locale --build-dir $buildDir --token $appCenterLoginApiToken;
     echo "########## $appName espresso finished ##########"
 else
