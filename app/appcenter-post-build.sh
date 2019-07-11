@@ -54,7 +54,7 @@ $APPCENTER_SOURCE_DIRECTORY/gradlew assembleAndroidTest
 $APPCENTER_SOURCE_DIRECTORY/gradlew assembleRelease
 
 # variables
-appCenterLoginApiToken=$APPCENTER_ACCESS_TOKEN
+#appCenterLoginApiToken=$APPCENTER_ACCESS_TOKEN
 locale="en_US"
 appName="GitDevopsDemo"
 deviceName="9c7fd2fc"
@@ -69,8 +69,7 @@ then
     # app center command espresso test
 
 echo "########## $appName espresso start ##########"
-    appcenter login
-    appcenter test run espresso --app $appName --devices $deviceName --app-path $appDebugPath --test-series $testSeriesName --locale $locale --build-dir $buildDir --token $appCenterLoginApiToken;
+    appcenter test run espresso --app $appName --devices $deviceName --app-path $appDebugPath --test-series $testSeriesName --locale $locale --build-dir $buildDir;
     echo "########## $appName espresso finished ##########"
 else
 
