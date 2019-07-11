@@ -39,8 +39,47 @@
 #	echo "failure mail sent"
 #fi
 
+# Post Build Script
+
+set -e # Exit immediately if a command exits with a non-zero status (failure)
+
+echo "***********"
+echo "Post Build Script"
+echo "***********"
+
+
+# Run Android APPDebug & APPTest
+$APPCENTER_SOURCE_DIRECTORY/gradlew assembleDebug
+$APPCENTER_SOURCE_DIRECTORY/gradlew assembleAndroidTest
+$APPCENTER_SOURCE_DIRECTORY/gradlew assembleRelease
+
+# variables
+appCenterLoginApiToken=$APPCENTER_ACCESS_TOKEN
+locale="en_US"
+appName="GitDevopsDemo"
+deviceName="9c7fd2fc"
+testSeriesName="launch-tests"
+appDebugPath=$APPCENTER_SOURCE_DIRECTORY/app/build/outputs/apk/debug/app-debug.apk
+appReleasePath=$APPCENTER_SOURCE_DIRECTORY/app/build/outputs/apk/release/app-release.apk
+buildDir=$APPCENTER_SOURCE_DIRECTORY/app/build/outputs/apk/androidTest/debug
+
+# Run UITest if branch is master
+if [ "$APPCENTER_BRANCH" == "master" ];
+then
+    # app center command espresso test
+
+echo "########## $appName espresso start ##########"
+    appcenter test run espresso --app $appName --devices $deviceName --app-path $appDebugPath --test-series $testSeriesName --locale $locale --build-dir $buildDir --token $appCenterLoginApiToken;
+    echo "########## $appName espresso finished ##########"
+else
+
+echo "Current branch is not 'master'"
+fi
+
+
 
 # Send a slack notification specifying whether or
 # not a build successfully completed.
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"The app has been built with AppCenter!"}' https://hooks.slack.com/services/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
+
