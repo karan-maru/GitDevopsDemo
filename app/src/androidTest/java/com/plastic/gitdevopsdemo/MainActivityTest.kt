@@ -14,16 +14,12 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-//import org.junit.After;
-//import com.microsoft.appcenter.espresso.Factory;
-//import com.microsoft.appcenter.espresso.ReportHelper;
-//import android.R.attr.label
-
-
+import org.junit.Rule
+import org.junit.After;
+import com.microsoft.appcenter.espresso.Factory;
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -33,12 +29,13 @@ class MainActivityTest {
     @JvmField
     var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
 
-//    @Rule
-//    public var reportHelper = Factory.getReportHelper()
+    @Rule
+    @JvmField
+    public var reportHelper = Factory.getReportHelper()
 
     @Test
     fun mainActivityTest() {
-//        reportHelper.label("bottonviewTest")
+        reportHelper.label("bottonviewTest")
 
         val appCompatButton = onView(
             allOf(
@@ -89,8 +86,8 @@ class MainActivityTest {
         }
     }
 
-//    @After
-//    fun TearDown() {
-//        reportHelper.label("Stopping App")
-//    }
+    @After
+    fun TearDown() {
+        reportHelper.label("Stopping App")
+    }
 }
