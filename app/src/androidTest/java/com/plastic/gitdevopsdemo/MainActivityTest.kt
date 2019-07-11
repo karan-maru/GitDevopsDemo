@@ -35,8 +35,6 @@ class MainActivityTest {
 
     @Test
     fun mainActivityTest() {
-        reportHelper.label("bottonviewTest")
-
         val appCompatButton = onView(
             allOf(
                 withId(R.id.button), withText("Click Me!!"),
