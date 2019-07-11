@@ -35,6 +35,8 @@ class MainActivityTest {
 
     @Test
     fun mainActivityTest() {
+        reportHelper.label("JTest Start")
+
         val appCompatButton = onView(
             allOf(
                 withId(R.id.button), withText("Click Me!!"),
@@ -86,6 +88,6 @@ class MainActivityTest {
 
     @After
     fun TearDown() {
-        reportHelper.label("Stopping App")
+        reportHelper.label("JTest Success")
     }
 }
