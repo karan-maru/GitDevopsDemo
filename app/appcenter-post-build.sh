@@ -56,7 +56,7 @@ $APPCENTER_SOURCE_DIRECTORY/gradlew assembleRelease
 # variables
 appCenterLoginApiToken=$APPCENTER_ACCESS_TOKEN
 locale="en_US"
-appName="GitDevopsDemo"
+appName="karan_maru/GitDevopsDemo"
 deviceName="9c7fd2fc"
 testSeriesName="launch-tests"
 appDebugPath=$APPCENTER_SOURCE_DIRECTORY/app/build/outputs/apk/debug/app-debug.apk
